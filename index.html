@@ -496,136 +496,138 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const body = document.body;
+        document.addEventListener('DOMContentLoaded', function() {
+            // Dark Mode Toggle
+            const darkModeToggle = document.getElementById('darkModeToggle');
+            const body = document.body;
 
-        // Load dark mode preference from local storage
-        const savedDarkMode = localStorage.getItem('darkMode');
-        if (savedDarkMode === 'enabled') {
-            body.classList.add('dark-mode');
-            darkModeToggle.checked = true;
-        }
-
-        darkModeToggle.addEventListener('change', function() {
-            body.classList.toggle('dark-mode');
-            // Save dark mode preference to local storage
-            if (this.checked) {
-                localStorage.setItem('darkMode', 'enabled');
-            } else {
-                localStorage.setItem('darkMode', 'disabled');
+            // Load dark mode preference from local storage
+            const savedDarkMode = localStorage.getItem('darkMode');
+            if (savedDarkMode === 'enabled') {
+                body.classList.add('dark-mode');
+                darkModeToggle.checked = true;
             }
-        });
 
-        // Sidebar Collapse
-        const sidebarCollapseBtn = document.getElementById('sidebarCollapse');
-        const sidebar = document.querySelector('.sidebar');
-        const content = document.querySelector('.content');
-
-        sidebarCollapseBtn.addEventListener('click', function() {
-            sidebar.classList.toggle('collapsed');
-            content.classList.toggle('sidebar-collapsed');
-        });
-
-        // Function to save todos to local storage
-        function saveTodos() {
-            localStorage.setItem('todos', JSON.stringify(todosData));
-        }
-
-        // Function to load todos from local storage
-        function loadTodos() {
-            const storedTodos = localStorage.getItem('todos');
-            if (storedTodos) {
-                todosData = JSON.parse(storedTodos);
-                renderTodos();
-            }
-        }
-
-        // Data structure to hold todos
-        let todosData = [];
-
-        // Load todos on page load
-        loadTodos();
-
-        // Function to render todos
-        function renderTodos() {
-            todos.innerHTML = '';
-            todosData.forEach((todo, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <input type="checkbox" ${todo.completed ? 'checked' : ''} data-index="${index}">
-                    <span class="${todo.completed ? 'completed' : ''}">${todo.text}</span>
-                    <span class="${todo.priority.toLowerCase()}">(${todo.priority})</span>
-                    <span>${todo.dueDate}</span>
-                    <button data-index="${index}">Delete</button>
-                `;
-                todos.appendChild(li);
+            darkModeToggle.addEventListener('change', function() {
+                body.classList.toggle('dark-mode');
+                // Save dark mode preference to local storage
+                if (this.checked) {
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    localStorage.setItem('darkMode', 'disabled');
+                }
             });
-        }
 
-        // Add Task Functionality
-        const addTaskBtn = document.getElementById('addTaskBtn');
-        const taskInput = document.getElementById('taskInput');
-        const prioritySelect = document.getElementById('prioritySelect');
-        const dueDateInput = document.getElementById('dueDateInput');
-        const todos = document.getElementById('todos');
+            // Sidebar Collapse
+            const sidebarCollapseBtn = document.getElementById('sidebarCollapse');
+            const sidebar = document.querySelector('.sidebar');
+            const content = document.querySelector('.content');
 
-        addTaskBtn.addEventListener('click', function() {
-            const taskText = taskInput.value.trim();
-            if (taskText) {
-                const priority = prioritySelect.value;
-                const dueDate = dueDateInput.value;
-                todosData.push({
-                    text: taskText,
-                    priority: priority,
-                    dueDate: dueDate,
-                    completed: false
-                });
-                saveTodos();
-                renderTodos();
-                taskInput.value = '';
-                dueDateInput.value = ''; // Clear due date after adding
+            sidebarCollapseBtn.addEventListener('click', function() {
+                sidebar.classList.toggle('collapsed');
+                content.classList.toggle('sidebar-collapsed');
+            });
+
+            // Function to save todos to local storage
+            function saveTodos() {
+                localStorage.setItem('todos', JSON.stringify(todosData));
             }
-        });
 
-        // Delete Task Functionality and Toggle Complete
-        todos.addEventListener('click', function(e) {
-            if (e.target) {
-                if (e.target.tagName === 'BUTTON') {
-                    const indexToDelete = parseInt(e.target.dataset.index);
-                    todosData.splice(indexToDelete, 1);
-                    saveTodos();
-                    renderTodos();
-                } else if (e.target.type === 'checkbox') {
-                    const indexToUpdate = parseInt(e.target.dataset.index);
-                    todosData[indexToUpdate].completed = e.target.checked;
-                    saveTodos();
+            // Function to load todos from local storage
+            function loadTodos() {
+                const storedTodos = localStorage.getItem('todos');
+                if (storedTodos) {
+                    todosData = JSON.parse(storedTodos);
                     renderTodos();
                 }
             }
-        });
 
-        // Sort Functionality
-        const sortByPriorityBtn = document.getElementById('sortByPriority');
-        const sortByDueDateBtn = document.getElementById('sortByDueDate');
-        const sortAlphabeticallyBtn = document.getElementById('sortAlphabetically');
+            // Data structure to hold todos
+            let todosData = [];
 
-        sortByPriorityBtn.addEventListener('click', () => {
-            todosData.sort((a, b) => {
-                const priorityOrder = { Low: 0, Medium: 1, High: 2 };
-                return priorityOrder[b.priority] - priorityOrder[a.priority];
+            // Load todos on page load
+            loadTodos();
+
+            // Function to render todos
+            function renderTodos() {
+                todos.innerHTML = '';
+                todosData.forEach((todo, index) => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                        <input type="checkbox" ${todo.completed ? 'checked' : ''} data-index="${index}">
+                        <span class="${todo.completed ? 'completed' : ''}">${todo.text}</span>
+                        <span class="${todo.priority.toLowerCase()}">(${todo.priority})</span>
+                        <span>${todo.dueDate}</span>
+                        <button data-index="${index}">Delete</button>
+                    `;
+                    todos.appendChild(li);
+                });
+            }
+
+            // Add Task Functionality
+            const addTaskBtn = document.getElementById('addTaskBtn');
+            const taskInput = document.getElementById('taskInput');
+            const prioritySelect = document.getElementById('prioritySelect');
+            const dueDateInput = document.getElementById('dueDateInput');
+            const todos = document.getElementById('todos');
+
+            addTaskBtn.addEventListener('click', function() {
+                const taskText = taskInput.value.trim();
+                if (taskText) {
+                    const priority = prioritySelect.value;
+                    const dueDate = dueDateInput.value;
+                    todosData.push({
+                        text: taskText,
+                        priority: priority,
+                        dueDate: dueDate,
+                        completed: false
+                    });
+                    saveTodos();
+                    renderTodos();
+                    taskInput.value = '';
+                    dueDateInput.value = ''; // Clear due date after adding
+                }
             });
-            renderTodos();
-        });
 
-        sortByDueDateBtn.addEventListener('click', () => {
-            todosData.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
-            renderTodos();
-        });
+            // Delete Task Functionality and Toggle Complete
+            todos.addEventListener('click', function(e) {
+                if (e.target) {
+                    if (e.target.tagName === 'BUTTON') {
+                        const indexToDelete = parseInt(e.target.dataset.index);
+                        todosData.splice(indexToDelete, 1);
+                        saveTodos();
+                        renderTodos();
+                    } else if (e.target.type === 'checkbox') {
+                        const indexToUpdate = parseInt(e.target.dataset.index);
+                        todosData[indexToUpdate].completed = e.target.checked;
+                        saveTodos();
+                        renderTodos();
+                    }
+                }
+            });
 
-        sortAlphabeticallyBtn.addEventListener('click', () => {
-            todosData.sort((a, b) => a.text.localeCompare(b.text));
-            renderTodos();
+            // Sort Functionality
+            const sortByPriorityBtn = document.getElementById('sortByPriority');
+            const sortByDueDateBtn = document.getElementById('sortByDueDate');
+            const sortAlphabeticallyBtn = document.getElementById('sortAlphabetically');
+
+            sortByPriorityBtn.addEventListener('click', () => {
+                todosData.sort((a, b) => {
+                    const priorityOrder = { Low: 0, Medium: 1, High: 2 };
+                    return priorityOrder[b.priority] - priorityOrder[a.priority];
+                });
+                renderTodos();
+            });
+
+            sortByDueDateBtn.addEventListener('click', () => {
+                todosData.sort((a, b) => new Date(a.dueDate) - new Date(b.dueDate));
+                renderTodos();
+            });
+
+            sortAlphabeticallyBtn.addEventListener('click', () => {
+                todosData.sort((a, b) => a.text.localeCompare(b.text));
+                renderTodos();
+            });
         });
     </script>
 </body>
