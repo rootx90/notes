@@ -572,10 +572,14 @@
             const todos = document.getElementById('todos');
 
             addTaskBtn.addEventListener('click', function() {
+                console.log('Add Task button clicked');
                 const taskText = taskInput.value.trim();
+                console.log('Task Text:', taskText);
                 if (taskText) {
                     const priority = prioritySelect.value;
                     const dueDate = dueDateInput.value;
+                    console.log('Priority:', priority);
+                    console.log('Due Date:', dueDate);
                     todosData.push({
                         text: taskText,
                         priority: priority,
