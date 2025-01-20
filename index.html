@@ -561,6 +561,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const todos = document.getElementById('todos');
             // Dark Mode Toggle
             const darkModeToggle = document.getElementById('darkModeToggle');
             const body = document.body;
@@ -610,6 +611,7 @@
 
             // Function to render todos
             function renderTodos() {
+                console.log('Rendering todos');
                 todos.innerHTML = '';
                 todosData.forEach((todo, index) => {
                     const li = document.createElement('li');
@@ -622,6 +624,7 @@
                     `;
                     todos.appendChild(li);
                 });
+                console.log('Todos rendered:', todosData.length);
             }
 
             // Add Task Functionality
@@ -629,9 +632,10 @@
             const taskInput = document.getElementById('taskInput');
             const prioritySelect = document.getElementById('prioritySelect');
             const dueDateInput = document.getElementById('dueDateInput');
-            const todos = document.getElementById('todos');
 
-            addTaskBtn.addEventListener('click', addTask);
+            addTaskBtn.addEventListener('click', function() {
+                addTask();
+            });
             taskInput.addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     addTask();
@@ -639,10 +643,14 @@
             });
 
             function addTask() {
+                console.log('Add Task function called');
                 const taskText = taskInput.value.trim();
+                console.log('Task Text:', taskText);
                 if (taskText) {
                     const priority = prioritySelect.value;
                     const dueDate = dueDateInput.value;
+                    console.log('Priority:', priority);
+                    console.log('Due Date:', dueDate);
                     todosData.push({
                         text: taskText,
                         priority: priority,
@@ -653,6 +661,9 @@
                     renderTodos();
                     taskInput.value = '';
                     dueDateInput.value = '';
+                    console.log('Task added successfully');
+                } else {
+                    console.log('Task text is empty, not adding');
                 }
             }
 
